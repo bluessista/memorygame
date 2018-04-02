@@ -14,7 +14,7 @@
         'anchor', 'anchor',
         'android', 'android'
     ];
-    let opened = []; //stores the cards
+    let opened = []; //stores the opened and matching cards
     let $scorePanel = document.querySelector('.score-panel');
     let moveCount = document.querySelector('.moves'); //Counter for moves
     let timer = document.querySelector('.time'); //Counter for time in seconds
@@ -22,7 +22,6 @@
     let gameboard = document.querySelector('.gameboard'); 
     let stars3 = 12; 
     let stars2 = 18;
-    let star1 = 25;
     let allCardsOpen = icons.length / 2; //16 cards - means 8 matches for success -> 16/2=8
     let successDelay = 500;
     let reset = document.querySelector('.restart');
@@ -38,7 +37,7 @@
         let cards = shuffle(icons);
         gameboard.innerHTML = '';
         generateCards(icons);
-        match = 0;
+        match = 0; //counts if two matching cards (class match) are opened
         moves = 0; //counts if two cards are opened
         moveCount.innerHTML = ('0');
         ratingStars.forEach(card => {
@@ -47,7 +46,6 @@
         addCardListener();
         second = 0;
         resetTimer(currentSeconds);
-        timer.innerHTML = (`${second}`);
     }
 
     // Shuffle function from http://stackoverflow.com/a/2450976
@@ -76,17 +74,17 @@
 
     // Handle Timer - restart when page is loaded
     const startTimer = () => {
-        currentSeconds = setInterval(handleSeconds, 1000);
-    }
-
-    const handleSeconds = () => {
-        timer.innerHTML = second;
-        second = second + 1;
+        currentSeconds = setInterval(() => {
+            timer.innerHTML = second;
+            second += 1;
+        }, 1000);
     }
 
     const resetTimer = (second) => {
         if(second) {
             clearInterval(second);
+            console.log(second);
+            timer.innerHTML = 0;
         }
     }
 
@@ -98,7 +96,7 @@
         } else if(moves > stars3 && moves < stars2) {
             ratingStars[2].classList.add('fa-star-o');
             rates = 2;
-        } else {
+        } else if(moves > stars2) {
             ratingStars[2].classList.add('fa-star-o');
             ratingStars[1].classList.add('fa-star-o');
             rates = 1;
@@ -114,8 +112,10 @@
 
     const handleCards = (card) => {
         card.addEventListener('click', function () {
+            if(moveCount === 1) {
+                startTimer();
+            }
 
-            startTimer();
             if(this.classList.contains('show') || this.classList.contains('match')) {
                 return true;
             }
@@ -152,6 +152,7 @@
                 moves++;
                 handleRating(moves);
                 moveCount.innerHTML = moves;
+                console.log(moveCount);
             }
             if (allCardsOpen === match) {
                 handleRating(moves);
@@ -166,21 +167,23 @@
     // Game Winner Popup Box via Sweetalert2.js
     const winningPopUp = (moves, moveCount) => {
         let title;
+        let stars;
         if (moves < stars3) {
             title = "Herzlichen Glückwunsch! \nDu hast gewonnen!";
+            stars = "3 Sternen";
         } else if (moves > stars3 && moves < stars2) {
             title = "Du warst nahe dran! \nVersuch es gleich nochmal!";
-        } else if (moves > stars2 && moves < star1) {
+            stars = "2 Sternen";
+        } else if (moves > stars2) {
             title = "Das hätte besser laufen können! \n Gib nicht auf!";
-        } else {
-            title = "Schade, zu viele Züge \n Versuch es erneut!";
-        }
+            stars = "1 Stern";
+        } 
 
         swal({
             allowEscapeKey: false,
             allowOutsideClick: false,
             title: title,
-            text: 'Mit ' + moves + ' Zügen und ' + moveCount + ' Sternen in ' + second + ' Sekunden.',
+            text: 'Mit ' + moves + ' Zügen und ' + stars + ' in ' + second + ' Sekunden.',
             type: 'success',
             confirmButtonColor: '#7a43a4',
             confirmButtonText: 'Nochmal spielen!'

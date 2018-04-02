@@ -1,0 +1,186 @@
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #ffffff url('../img/purty_wood.png'); /* Background pattern from Subtle Patterns */
+    font-family: 'Coda', cursive;
+}
+
+/* centralized positioning of the container content */
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+h1 {
+    font-family: 'Bangers', cursive;
+    font-weight: 400;
+    font-size: 3rem;
+}
+
+/*
+ * Styles for the gameboard of cards
+ */
+
+.gameboard {
+    width: 660px;
+    min-height: 680px;
+    background: url('../img/diagmonds.png');
+    padding: 32px;
+    border: 5px solid #fff;
+    border-radius: 2px;
+    box-shadow: 5px 8px 30px 0 rgba(46, 61, 73, 0.5);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 3em;
+}
+
+.gameboard .card {
+    height: 125px;
+    width: 125px;
+    background: url('../img/pow-star.png');
+    font-size: 0;
+    color: #ffffff;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 5px 2px 10px 0 rgba(46, 61, 73, 0.5);
+}
+
+.gameboard .card.open {
+    transform: rotateY(0);
+    background: #7a43a4;
+    cursor: default;
+}
+
+.gameboard .card.show {
+    font-size: 33px;
+}
+
+.gameboard .card.match {
+    cursor: default;
+    background: #02aacc;
+    font-size: 33px;
+}
+
+.gameboard .card.notmatch {
+    background: rgb(142, 93, 93);
+  }
+/*
+ * Styles for the Score Panel
+ */
+
+.score-panel {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    width: 600px;
+    margin-bottom: 10px;
+}
+
+.score-panel .stars {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    margin: 0 5px 0 0;
+}
+
+.score-panel .stars li {
+    list-style: none;
+    display: inline-block;
+}
+
+.score-panel .restart {
+    float: right;
+    cursor: pointer;
+}
+
+.swal2-modal {
+    left: unset;
+    top: unset;
+    height: 60%;
+}
+
+.swal2-icon {
+    width: 50%;
+}
+
+footer {
+    text-align: center;
+    font-size: 0.8rem;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* Small Devices */
+
+@media screen and (max-width: 600px) and (min-width: 400px) {
+    .gameboard {
+        width: 400px;
+        min-height: 400px;
+        padding: 5%;
+        border: 2px solid #fff;
+        margin: 0 0 1em;
+    }
+    
+    .gameboard .card {
+        height: 80px;
+        width: 80px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .score-panel {
+        width: 380px;
+    }
+
+    .swal2-modal {
+        height: 80%;
+    }
+}
+
+/* Mini Devices */
+
+@media screen and (max-width: 400px) and (min-width: 300px) {
+    .gameboard {
+        width: 300px;
+        min-height: 300px;
+        padding: 3%;
+        border: 2px solid #fff;
+    }
+    
+    .gameboard .card {
+        height: 65px;
+        width: 65px;
+    }
+    
+    .score-panel {
+        width: 280px;
+    }
+
+    .swal2-modal {
+        height: 90%;
+    }
+
+}

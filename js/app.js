@@ -1,6 +1,6 @@
 "use strict";
 
-{
+(function (){
     /*
     * Create a list that holds all of your cards
     */
@@ -25,27 +25,24 @@
     let allCardsOpen = icons.length / 2; //16 cards - means 8 matches for success -> 16/2=8
     let successDelay = 500;
     let reset = document.querySelector('.restart');
-    let second, currentSeconds, moves, match;
+    let second, currentSeconds, moves, match, started;
 
-    /*
-    * Display the cards on the page
-    *   - shuffle the list of cards using the provided "shuffle" method below
-    *   - loop through each card and create its HTML
-    *   - add each card's HTML to the page
-    */
     const init = () => {
         let cards = shuffle(icons);
         gameboard.innerHTML = '';
         generateCards(icons);
+        opened = [];
         match = 0; //counts if two matching cards (class match) are opened
         moves = 0; //counts if two cards are opened
         moveCount.innerHTML = ('0');
         ratingStars.forEach(card => {
             card.classList.remove('fa-star-o');
         });
+        started = false;
         addCardListener();
-        second = 0;
         resetTimer(currentSeconds);
+        second = 0;
+        timer.innerHTML = "0";
     }
 
     // Shuffle function from http://stackoverflow.com/a/2450976
@@ -80,28 +77,13 @@
         }, 1000);
     }
 
-    const resetTimer = (second) => {
-        if(second) {
-            clearInterval(second);
-            console.log(second);
-            timer.innerHTML = 0;
+    const resetTimer = (time) => {
+        if(time) {
+            clearInterval(time);
+            setTimeout(() => {
+              second = 0;
+            }, 1000);
         }
-    }
-
-    //Handle Rating
-    const handleRating = (moves) => {
-        let rates = 3;
-        if(moves < 3){
-            rates;
-        } else if(moves > stars3 && moves < stars2) {
-            ratingStars[2].classList.add('fa-star-o');
-            rates = 2;
-        } else if(moves > stars2) {
-            ratingStars[2].classList.add('fa-star-o');
-            ratingStars[1].classList.add('fa-star-o');
-            rates = 1;
-        }
-        return { score: rates };
     }
 
     // Handle Clicks = 2 clicks = 1 move
@@ -112,57 +94,80 @@
 
     const handleCards = (card) => {
         card.addEventListener('click', function () {
-            if(moveCount === 1) {
-                startTimer();
-            }
-
+            if (started === false) {
+              startTimer();
+              started = true;
+            }  
+          
+            let openCard = this.innerHTML;
+            
             if(this.classList.contains('show') || this.classList.contains('match')) {
                 return true;
             }
-            
-            let openCard = this.innerHTML;
+
             this.classList.add('open', 'show');
             opened.push(openCard);
 
             if(opened.length > 1) {
-                if(openCard === opened[0]) {
-                    let cardsOpen = gameboard.querySelectorAll('.open');
-
-                    cardsOpen.forEach((card) => {
-                        card.classList.add('match', 'animated', 'tada');
-                    });
-
-                    setTimeout(function() {
-                        let cardsMatch = gameboard.querySelectorAll('.match');
-                        cardsMatch.forEach((card) => {
-                            card.classList.remove('open', 'show', 'animated', 'tada');
-                        });
-                    }, successDelay);
-                    match++;
-                } else {
-                    let cardsOpen = gameboard.querySelectorAll('.open');
-                    cardsOpen.forEach((card) => {
-                        card.classList.remove('nomatch');
-                        setTimeout(function() {
-                            card.classList.remove('open', 'show');
-                        }, successDelay);
-                    });
-                }
+                matched();
                 opened = [];
                 moves++;
                 handleRating(moves);
                 moveCount.innerHTML = moves;
-                console.log(moveCount);
+              console.log(moves);
             }
             if (allCardsOpen === match) {
                 handleRating(moves);
                 let score = handleRating(moves).score;
                 setTimeout(function () {
                     winningPopUp(moves, score);
+                    resetTimer(currentSeconds);
                 }, 500);
             }
         });
     };
+  
+    const matched = () => {
+      if(opened[1] === opened[0]) {
+        let cardsOpen = gameboard.querySelectorAll('.open');
+
+        cardsOpen.forEach((card) => {
+          card.classList.add('match', 'animated', 'tada');
+        });
+
+        setTimeout(function() {
+          let cardsMatch = gameboard.querySelectorAll('.match');
+          cardsMatch.forEach((card) => {
+            card.classList.remove('open', 'show', 'animated', 'tada');
+          });
+        }, successDelay);
+        match++;
+      } else {
+        let cardsOpen = gameboard.querySelectorAll('.open');
+        cardsOpen.forEach((card) => {
+          card.classList.remove('nomatch');
+          setTimeout(function() {
+            card.classList.remove('open', 'show');
+          }, successDelay);
+        });
+      }
+    }
+
+    //Handle Rating
+    const handleRating = (clicks) => {
+        let rates;
+        if(clicks < stars3){
+            rates = 3;
+        } else if(clicks > stars3 && clicks < stars2) {
+            ratingStars[2].classList.add('fa-star-o');
+            rates = 2;
+        } else if(clicks > stars2) {
+            ratingStars[2].classList.add('fa-star-o');
+            ratingStars[1].classList.add('fa-star-o');
+            rates = 1;
+        }
+        return { score: rates };
+    }
 
     // Game Winner Popup Box via Sweetalert2.js
     const winningPopUp = (moves, moveCount) => {
@@ -213,15 +218,4 @@
 
     init();
 
-    /*
-    * set up the event listener for a card. If a card is clicked:
-    *  - display the card's symbol (put this functionality in another function that you call from this one)
-    *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
-    *  - if the list already has another card, check to see if the two cards match
-    *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
-    *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
-    *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
-    *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
-    */
-
-}
+})();

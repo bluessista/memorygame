@@ -173,10 +173,10 @@
     const winningPopUp = (moves, moveCount) => {
         let title;
         let stars;
-        if (moves < stars3) {
+        if (moves <= stars3) {
             title = "Herzlichen Glückwunsch! \nDu hast gewonnen!";
             stars = "3 Sternen";
-        } else if (moves > stars3 && moves < stars2) {
+        } else if (moves > stars3 && moves <= stars2) {
             title = "Du warst nahe dran! \nVersuch es gleich nochmal!";
             stars = "2 Sternen";
         } else if (moves > stars2) {

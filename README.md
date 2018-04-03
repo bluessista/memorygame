@@ -1,26 +1,25 @@
 # Memory Game Project
 
-by Inga Schünemann
+by Inga Schünemann 
+during the Udacity Front End Nanodegree Course
 
-Using the starter Code from Udacity and the [SweetAlert2](https://sweetalert2.github.io/) PopUp Modal for the winning message.
-It can be played on large and mobile screens. 
-Added some mobile styling as well.
 
 ## Table of Contents
 
 * [Instructions](#instructions)
-* [Contributing](#contributing)
+* [How to Play](#howtoplay)
+
 
 ## Instructions
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+I was using the starter Code from Udacity to start building the memory game. Additionally I used [SweetAlert2](https://sweetalert2.github.io/) for the popup modal for the winning and restart message.
 
-To get started, open `js/app.js` and start building out the app's functionality
+The can be played on large and mobile screens as I added some mobile styling as well.
 
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
+## How to Play
 
-## Contributing
+Find matching pairs through clicking the cards. If you open two cards, it will count as one move.
+You will win the game, if you finish it with 3 stars (less then 12 moves). 
+If you have between 13 and 18 moves, you will earn 2 stars and if you have more moves, there is one star waiting for you.
 
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
-
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+Have fun!
